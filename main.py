@@ -28,11 +28,7 @@ def check_state(answer):
 def remaining_states(guesses):
     data = pandas.read_csv("50_states.csv")
     all_states = data["state"].to_list()
-    missing = []
-    for state in all_states:
-        if state not in guesses:
-            missing.append(state)
-
+    missing = [state for state in all_states if state not in guesses]
     data = pandas.DataFrame({"state": missing})
     data.to_csv("missing_states.csv")
 

@@ -13,7 +13,7 @@ def write_answer(answer, coor):
     state.hideturtle()
     state.penup()
     state.goto(coor)
-    state.write(answer, False, "center", ("Arial", 8, "normal"))
+    state.write(answer)
 
 
 def check_state(answer):
@@ -22,14 +22,18 @@ def check_state(answer):
     if state.empty:
         return False
     else:
-        x = state["x"].iloc[0]
-        y = state["y"].iloc[0]
-        return (x, y)
+        return (state["x"].item(), state["y"].item())
 
 
-user_answer = turtle.textinput("Guess the state", "Type a state's name").title()
-coordinates = check_state(user_answer)
-if coordinates:
-    write_answer(user_answer, coordinates)
+correct_guesses = []
+while len(correct_guesses) < 50:
+    user_answer = turtle.textinput(f"{len(correct_guesses)}/50 States Correct", "Type a state's name").title()
+    coordinates = check_state(user_answer)
+
+    if coordinates:
+        if user_answer not in correct_guesses:
+            write_answer(user_answer, coordinates)
+            correct_guesses.append(user_answer)
+
 
 screen.exitonclick()

@@ -25,15 +25,29 @@ def check_state(answer):
         return (state["x"].item(), state["y"].item())
 
 
+def remaining_states(guesses):
+    data = pandas.read_csv("50_states.csv")
+    all_states = data["state"].to_list()
+    missing = []
+    for state in all_states:
+        if state not in guesses:
+            missing.append(state)
+
+    data = pandas.DataFrame({"state": missing})
+    data.to_csv("missing_states.csv")
+
+
 correct_guesses = []
 while len(correct_guesses) < 50:
     user_answer = turtle.textinput(f"{len(correct_guesses)}/50 States Correct", "Type a state's name").title()
+    if user_answer == "Exit":
+        remaining_states(correct_guesses)
+        break
     coordinates = check_state(user_answer)
 
     if coordinates:
         if user_answer not in correct_guesses:
             write_answer(user_answer, coordinates)
             correct_guesses.append(user_answer)
-
 
 screen.exitonclick()
